@@ -41,15 +41,7 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        refreshTokens: {
-            type: [
-                {
-                    token: String,
-                    source: String,
-                },
-            ],
-            default: [],
-        },
+
         contacts: {
             type: [{ name: String, phone: String }],
             default: [],
@@ -65,9 +57,13 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        timeRevokeToken: {
-            type: Date,
-            default: new Date(),
+        errorLoginTime: {
+            type: Number,
+            default: 0,
+        },
+        tokenVersion: {
+            type: Number,
+            default: 0,
         },
     },
     { timestamps: true },
