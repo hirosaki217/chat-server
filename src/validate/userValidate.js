@@ -129,6 +129,12 @@ const userValidate = {
         if (!this.validatePassword(oldPassword) || !this.validatePassword(newPassword) || oldPassword == newPassword)
             throw new UserError('Body change password invalid');
     },
+    validatePhone: (phone) => {
+        if (!phone) return false;
+        const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+
+        return regex.test(phone);
+    },
 };
 
 module.exports = userValidate;
