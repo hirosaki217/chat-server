@@ -7,6 +7,7 @@ class MeController {
 
     async profile(req, res, next) {
         const { _id } = req;
+        return await meService.getProfile(_id);
     }
 
     async updateProfile(req, res, next) {
