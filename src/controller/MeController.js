@@ -73,9 +73,9 @@ class MeController {
         const { _id } = req;
 
         try {
-            const phoneBooks = await meService.getPhoneBooks(_id);
+            const contacts = await meService.getContacts(_id);
 
-            res.json(phoneBooks);
+            res.json(contacts);
         } catch (err) {
             next(err);
         }
