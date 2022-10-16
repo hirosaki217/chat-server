@@ -41,14 +41,14 @@ class AwsS3Service {
             return Location;
         } catch (err) {
             console.log('err: ', err);
-            throw new MyError('Upload file Aws S3 failed');
+            throw new UserError('Upload file Aws S3 failed');
         }
     }
 
     async uploadWithBase64(fileBase64, fileName, fileExtension) {
         const fileBuffer = Buffer.from(fileBase64, 'base64');
 
-        if (fileBuffer.length > FILE_SIZE) throw new MyError('Size file < 20 MB');
+        if (fileBuffer.length > FILE_SIZE) throw new UserError('Size file < 20 MB');
 
         const uploadParams = {
             Bucket: BucketName,
@@ -66,7 +66,7 @@ class AwsS3Service {
 
             return Location;
         } catch {
-            throw new MyError('Upload file Aws S3 failed');
+            throw new UserError('Upload file Aws S3 failed');
         }
     }
 
@@ -82,7 +82,7 @@ class AwsS3Service {
         try {
             await s3.deleteObject(params).promise();
         } catch (err) {
-            throw new MyError('Delete file Aws S3 failed');
+            throw new UserError('Delete file Aws S3 failed');
         }
     }
 }

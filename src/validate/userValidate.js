@@ -20,7 +20,7 @@ const userValidate = {
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(String(email).toLowerCase());
     },
-    validatePhone: (phone) => {
+    validateContact: (phone) => {
         if (!phone) return false;
         const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 
@@ -38,7 +38,7 @@ const userValidate = {
 
         return true;
     },
-    validateDateOfBirth: (date) => {
+    validateBirthDay: (date) => {
         if (!date) return false;
 
         const { day, month, year } = date;
@@ -77,7 +77,7 @@ const userValidate = {
         if (!this.validateUsername(username) || !this.validateOTP(otpPhone) || !this.validatePassword(password))
             throw new UserError('Info reset password invalid');
     },
-    validatePhonesList: function (phones) {
+    validateContactList: function (phones) {
         if (!phones || !Array.isArray(phones)) throw new UserError('Phones invalid');
 
         phones.forEach((phoneEle) => {

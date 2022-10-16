@@ -7,8 +7,10 @@ const route = (app, io) => {
     const friendRouter = require('./friend')(io);
     const messageRouter = require('./message')(io);
     const conversationRouter = require('./conversation')(io);
+    const meRouter = require('./me')(io);
 
     app.use('/users', checkAuth, userRouter);
+    app.use('/m', checkAuth, meRouter);
     app.use('/auth', authRouter);
     app.use('/friends', checkAuth, friendRouter);
     app.use('/messages', checkAuth, messageRouter);
