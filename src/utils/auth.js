@@ -27,7 +27,6 @@ const createToken = (type, data) => {
 
 const sendRefreshToken = (res, data) => {
     const refreshToken = createToken('refreshToken', data);
-    // console.log(refreshToken);
 
     res.cookie(process.env.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
         httpOnly: true,

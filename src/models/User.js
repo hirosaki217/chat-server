@@ -182,6 +182,13 @@ userSchema.statics.getSummaryById = async (_id, message = 'User') => {
     };
 };
 
+userSchema.statics.logout = async (_id) => {
+    const user = await User.findOne({ _id });
+    if (!user) throw new NotFoundError('User');
+    user.tokenVersion += 1;
+    return await user.save();
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

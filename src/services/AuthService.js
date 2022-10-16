@@ -40,6 +40,11 @@ class AuthService {
         });
         await newUser.save();
     }
+
+    async logout(userId) {
+        const user = await User.logout(userId);
+        return user;
+    }
 }
 
 module.exports = new AuthService();
