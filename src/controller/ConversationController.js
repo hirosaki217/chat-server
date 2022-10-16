@@ -17,7 +17,6 @@ class ConversationController {
         this.deleteManagersForConversation = this.deleteManagersForConversation.bind(this);
     }
 
-    // [GET] ?name&type
     async getList(req, res, next) {
         const { _id } = req;
         const { name = '', type = 0 } = req.query;
@@ -42,7 +41,6 @@ class ConversationController {
         }
     }
 
-    // [GET] /:id
     async getOne(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -56,7 +54,6 @@ class ConversationController {
         }
     }
 
-    // [POST] /personals/:userId
     async createConversation(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -70,7 +67,6 @@ class ConversationController {
         }
     }
 
-    // [POST] /groups
     async createGroupConversation(req, res, next) {
         const { _id } = req;
         const { name = '', userIds = [] } = req.body;
@@ -91,7 +87,6 @@ class ConversationController {
         }
     }
 
-    //[PATCH]  /:id/name
     async rename(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -102,18 +97,12 @@ class ConversationController {
 
             const message = await conversationService.rename(id, name, _id);
 
-            // là group thì bắt sự kiện socket
-            if (message) {
-                this.io.to(id + '').emit('rename-conversation', id, name, message);
-            }
-
             res.json();
         } catch (err) {
             next(err);
         }
     }
 
-    //[PATCH] /:id/avatar
     async updateAvatar(req, res, next) {
         const { _id, file } = req;
         const { id } = req.params;
@@ -127,7 +116,6 @@ class ConversationController {
         }
     }
 
-    //[PATCH] /:id/avatar/base64
     async updateAvatarWithBase64(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -141,7 +129,6 @@ class ConversationController {
         }
     }
 
-    // [DELETE] /:id/messages
     async deleteAllMessage(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -155,7 +142,6 @@ class ConversationController {
         }
     }
 
-    // [DELETE] /:id
     async deleteById(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -169,7 +155,6 @@ class ConversationController {
         }
     }
 
-    // [PATCH] /:id/notify/:isNotify
     async updateConversationNotify(req, res, next) {
         const { _id } = req;
         const { id, isNotify } = req.params;
@@ -184,7 +169,6 @@ class ConversationController {
         }
     }
 
-    // [GET] /:id/last-view
     async getLastViewOfMembers(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -197,7 +181,6 @@ class ConversationController {
             next(err);
         }
     }
-    // [PATCH] /:id/join-from-link/:isStatus
     async updateJoinFromLink(req, res, next) {
         const { _id } = req;
         const { id, isStatus } = req.params;
@@ -213,7 +196,6 @@ class ConversationController {
         }
     }
 
-    // [GET] /:id/sumary
     async getConversationSummary(req, res, next) {
         const { id } = req.params;
 
@@ -226,7 +208,6 @@ class ConversationController {
         }
     }
 
-    // [POST] /:id/managers
     async addManagersForConversation(req, res, next) {
         const { _id } = req;
         const { id } = req.params;

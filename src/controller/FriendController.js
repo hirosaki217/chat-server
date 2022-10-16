@@ -1,6 +1,5 @@
 const friendService = require('../services/FriendService');
 
-// /friends
 class FriendController {
     constructor() {
         this.acceptFriend = this.acceptFriend.bind(this);
@@ -10,7 +9,6 @@ class FriendController {
         this.deleteInviteWasSend = this.deleteInviteWasSend.bind(this);
     }
 
-    // /?name
     async getListFriends(req, res, next) {
         const { _id } = req;
         const { name = '' } = req.query;
@@ -24,7 +22,6 @@ class FriendController {
         }
     }
 
-    //  /:userId
     async acceptFriend(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -38,7 +35,6 @@ class FriendController {
         }
     }
 
-    //  /:userId
     async deleteFriend(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -51,7 +47,6 @@ class FriendController {
         }
     }
 
-    //  /invites
     async getListFriendInvites(req, res, next) {
         const { _id } = req;
         try {
@@ -63,7 +58,6 @@ class FriendController {
         }
     }
 
-    //  /invites/:userId
     async deleteFriendInvite(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -77,7 +71,6 @@ class FriendController {
         }
     }
 
-    //  /invites/me
     async getListFriendInvitesWasSend(req, res, next) {
         const { _id } = req;
         try {
@@ -89,7 +82,6 @@ class FriendController {
         }
     }
 
-    //  /invites/me/:userId
     async sendFriendInvite(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -102,7 +94,6 @@ class FriendController {
         }
     }
 
-    // /invites/me/:userId
     async deleteInviteWasSend(req, res, next) {
         const { _id } = req;
         const { userId } = req.params;
@@ -116,7 +107,6 @@ class FriendController {
         }
     }
 
-    //  /suggest
     async getSuggestFriends(req, res, next) {
         const { _id } = req;
         const { page = 0, size = 12 } = req.query;

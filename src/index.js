@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const cors = require('./config/cors');
 const http = require('http');
 const useragent = require('express-useragent');
 const db = require('./config/db');
@@ -13,10 +13,11 @@ const socketio = require('socket.io');
 
 // routes
 const routes = require('./routes');
+const socket = require('./app/socket');
 
 db.connect();
 
-app.use(cors());
+app.use(cors);
 app.use(useragent.express());
 
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use('/refresh_token', refreshTokenRouter);
 const server = http.createServer(app);
 const io = socketio(server);
+socket(io);
 routes(app, io);
 
 app.use(handleErr);

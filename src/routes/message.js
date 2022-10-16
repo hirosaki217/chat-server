@@ -3,7 +3,7 @@ const uploadFile = require('../middleware/uploadFile');
 const MessageController = require('../controller/MessageController');
 
 const messageRouter = (io) => {
-    const messageController = new MessageController();
+    const messageController = new MessageController(io);
 
     router.get('/:conversationId', messageController.getList);
     router.get('/channel/:channelId', messageController.getListByChannelId);

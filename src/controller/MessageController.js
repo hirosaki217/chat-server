@@ -15,7 +15,6 @@ class MessageController {
         this.shareMessage = this.shareMessage.bind(this);
     }
 
-    // [GET] /:conversationId
     async getList(req, res, next) {
         const { _id } = req;
         const { conversationId } = req.params;
@@ -30,7 +29,6 @@ class MessageController {
         }
     }
 
-    // [GET] /channel/:channelId
     async getListByChannelId(req, res, next) {
         const { _id } = req;
         const { channelId } = req.params;
@@ -50,7 +48,6 @@ class MessageController {
         }
     }
 
-    //[POST] /text  tin nhắn dạng text
     async addText(req, res, next) {
         const { _id } = req;
 
@@ -64,7 +61,6 @@ class MessageController {
         }
     }
 
-    //[POST] /files  tin nhắn dạng file
     async addFile(req, res, next) {
         const { _id, file } = req;
         const { type, conversationId, channelId } = req.query;
@@ -73,14 +69,13 @@ class MessageController {
             if (!conversationId || !type) throw new UserError('Params type or conversationId not exists');
 
             const message = await messageService.addFile(file, type, conversationId, channelId, _id);
-
+            this.io.to(conversationId + '').emit('new-message', conversationId, message);
             res.status(201).json(message);
         } catch (err) {
             next(err);
         }
     }
 
-    // [POST] /files/base64
     async addFileWithBase64(req, res, next) {
         const { _id } = req;
         const { type, conversationId, channelId } = req.query;
@@ -94,7 +89,6 @@ class MessageController {
         }
     }
 
-    // [DELETE] /:id thu hồi tin nhắn
     async deleteById(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -108,7 +102,6 @@ class MessageController {
         }
     }
 
-    // [DELETE] /:id/only xóa ở phía tôi
     async deleteOnlyMeById(req, res, next) {
         const { _id } = req;
         const { id } = req.params;
@@ -122,7 +115,6 @@ class MessageController {
         }
     }
 
-    // [POST] /:id/reacts/:type
     async addReaction(req, res, next) {
         const { _id } = req;
         const { id, type } = req.params;
@@ -136,7 +128,6 @@ class MessageController {
         }
     }
 
-    // [GET] /:conversationId/files
     async getListFiles(req, res, next) {
         const { _id } = req;
         const { conversationId } = req.params;
@@ -153,7 +144,6 @@ class MessageController {
         }
     }
 
-    // [POST] /:id/share/:conversationId
     async shareMessage(req, res, next) {
         const { _id } = req;
         const { id, conversationId } = req.params;
