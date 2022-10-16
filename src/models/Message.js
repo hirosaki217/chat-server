@@ -336,7 +336,6 @@ messageSchema.statics.getListByConversationIdAndUserIdOfGroup = async (conversat
                 as: 'userOptions',
             },
         },
-        // replyMessage
         {
             $lookup: {
                 from: 'messages',
@@ -353,7 +352,6 @@ messageSchema.statics.getListByConversationIdAndUserIdOfGroup = async (conversat
                 as: 'replyUser',
             },
         },
-        // lấy danh sách user thả react
         {
             $lookup: {
                 from: 'users',
@@ -481,7 +479,6 @@ messageSchema.statics.getListByConversationIdAndTypeAndUserId = async (conversat
                 as: 'userOptions',
             },
         },
-        // replyMessage
         {
             $lookup: {
                 from: 'messages',
@@ -498,7 +495,6 @@ messageSchema.statics.getListByConversationIdAndTypeAndUserId = async (conversat
                 as: 'replyUser',
             },
         },
-        // lấy danh sách user thả react
         {
             $lookup: {
                 from: 'users',

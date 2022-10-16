@@ -72,11 +72,8 @@ class UserService {
 
     async getFriendStatus(myId, searchUserId) {
         let status = FRIEND_STATUS[3];
-        // check xem có bạn bè không
         if (await Friend.existsByIds(myId, searchUserId)) status = FRIEND_STATUS[0];
-        // check đối phương  gởi lời mời
         else if (await FriendRequest.existsByIds(searchUserId, myId)) status = FRIEND_STATUS[1];
-        // check mình gởi lời mời
         else if (await FriendRequest.existsByIds(myId, searchUserId)) status = FRIEND_STATUS[2];
         return status;
     }

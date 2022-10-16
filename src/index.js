@@ -8,9 +8,11 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.SERVER_PORT;
 const refreshTokenRouter = require('./routes/refreshTokentRouter');
+const handleErr = require('./middleware/handleErr');
+const socketio = require('socket.io');
 
 // routes
-const routerAuth = require('./routes/auth');
+const routes = require('./routes');
 
 db.connect();
 
@@ -22,8 +24,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 app.use('/refresh_token', refreshTokenRouter);
 const server = http.createServer(app);
+const io = socketio(server);
+routes(app, io);
 
-app.use('/', routerAuth);
+app.use(handleErr);
 
 server.listen(port, function () {
     console.log('server started on http://localhost:' + port);

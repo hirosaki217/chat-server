@@ -43,7 +43,7 @@ conversationSchema.statics.getListGroupByNameContainAndUserId = async (name, use
     }).sort({ updatedAt: -1 });
 };
 
-conversationSchema.statics.getListPersonalByNameContainAndUserId = async (name, userId) => {
+conversationSchema.statics.getListByNameContainAndUserId = async (name, userId) => {
     return await Conversation.aggregate([
         {
             $match: {
@@ -115,7 +115,7 @@ conversationSchema.statics.getListNameAndAvatarOfMembersById = async (_id) => {
     ]);
 };
 
-conversationSchema.statics.existsPersonalConversation = async (userId1, userId2) => {
+conversationSchema.statics.existsConversation = async (userId1, userId2) => {
     const conversation = await Conversation.findOne({
         type: false,
         members: { $all: [userId1, userId2] },

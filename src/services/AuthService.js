@@ -2,10 +2,6 @@ const User = require('../models/User');
 
 const userValidate = require('../validate/userValidate');
 
-const NotFoundError = require('../exception/NotFoundError');
-const UserError = require('../exception/UserError');
-const AuthError = require('../exception/AuthError');
-const axios = require('axios');
 const { createToken, sendRefreshToken } = require('../utils/auth');
 const TypeToken = {
     ACCESS_TOKEN: 'accessToken',
@@ -34,8 +30,8 @@ class AuthService {
 
     async registry(dataUser) {
         const data = await userValidate.checkRegistryInfo(dataUser);
-        const index = COLORS.length - 1;
-        const color = Math.floor(Math.random() * COLORS[index]);
+
+        const color = COLORS[Math.floor(Math.random() * (COLORS.length - 1))];
         const avatarColor = color;
         const newUser = new User({
             ...data,

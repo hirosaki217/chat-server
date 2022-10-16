@@ -8,9 +8,10 @@ const friendRequestSchema = new Schema(
         senderId: ObjectId,
         receiverId: ObjectId,
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
+// kiem tra co ton tai yeu cau ket ban nay khong
 friendRequestSchema.statics.existsByIds = async (senderId, receiverId) => {
     const isExists = await FriendRequest.findOne({
         senderId,
@@ -22,11 +23,7 @@ friendRequestSchema.statics.existsByIds = async (senderId, receiverId) => {
     return false;
 };
 
-friendRequestSchema.statics.checkByIds = async (
-    senderId,
-    receiverId,
-    message = 'Invite'
-) => {
+friendRequestSchema.statics.checkByIds = async (senderId, receiverId, message = 'Invite') => {
     const isExists = await FriendRequest.findOne({
         senderId,
         receiverId,
@@ -35,11 +32,8 @@ friendRequestSchema.statics.checkByIds = async (
     if (!isExists) throw new NotFoundError(message);
 };
 
-friendRequestSchema.statics.deleteByIds = async (
-    senderId,
-    receiverId,
-    message = 'Invite'
-) => {
+// xoa yeu cau ket ban
+friendRequestSchema.statics.deleteByIds = async (senderId, receiverId, message = 'Invite') => {
     const queryResult = await FriendRequest.deleteOne({ senderId, receiverId });
 
     const { deletedCount } = queryResult;
