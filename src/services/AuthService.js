@@ -36,7 +36,8 @@ class AuthService {
         const newUser = new User({
             ...data,
             avatarColor,
-            isActived: false,
+            // chua otp
+            isActived: true,
         });
         await newUser.save();
     }
