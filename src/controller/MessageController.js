@@ -54,7 +54,7 @@ class MessageController {
         try {
             const { conversationId } = req.body;
             const message = await messageService.addText(req.body, _id);
-
+            this.io.to(conversationId + '').emit('new-message', conversationId, message);
             res.status(201).json(message);
         } catch (err) {
             next(err);

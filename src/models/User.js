@@ -48,7 +48,10 @@ const userSchema = new Schema(
         },
         otp: String,
         otpTime: Date,
-        isActived: Boolean,
+        isActived: {
+            type: Boolean,
+            default: true,
+        },
         isDeleted: {
             type: Boolean,
             default: false,
