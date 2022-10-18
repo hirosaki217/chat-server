@@ -20,7 +20,7 @@
     "homepage": "https://github.com/hirosaki217/chat-server#readme",
     "dependencies": {
         "aws-sdk": "^2.1233.0",
-        "axios": "^1.1.2",
+        "axios": "^0.23.0",
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",

@@ -19,23 +19,69 @@ class AuthController {
 
     async registry(req, res, next) {
         try {
-            await authService.registry(req.body);
+            const rs = await authService.registry(req.body);
 
-            res.status(201).json();
+            res.status(201).json({ user: rs });
         } catch (err) {
             next(err);
         }
     }
     async logout(req, res, next) {
-        console.log(req._id);
         try {
             if (req._id) {
-                await authService.logout(req._id);
+                const isLogout = await authService.logout(req._id);
                 res.clearCookie(process.env.REFRESH_TOKEN_COOKIE_NAME);
-                // res.status(201).json({ message: 'user logout' });
+                res.json({ logout: isLogout });
             }
         } catch (error) {
             next(error);
+        }
+    }
+
+    async confirmAccount(req, res, next) {
+        const { username, otp } = req.body;
+
+        try {
+            await authService.confirmAccount(username, otp + '');
+
+            res.json();
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async resetOTP(req, res, next) {
+        const { username } = req.body;
+        try {
+            const status = await authService.resetOTP(username);
+
+            res.json(status);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async confirmPassword(req, res, next) {
+        const { username, otp, password } = req.body;
+
+        try {
+            await authService.resetPassword(username, otp + '', password);
+
+            res.json();
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async getUserInfo(req, res, next) {
+        const { username } = req.params;
+
+        try {
+            const user = await userService.getUserSummaryInfo(username);
+
+            return res.json(user);
+        } catch (err) {
+            next(err);
         }
     }
 }

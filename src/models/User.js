@@ -189,7 +189,12 @@ userSchema.statics.logout = async (_id) => {
     const user = await User.findOne({ _id });
     if (!user) throw new NotFoundError('User');
     user.tokenVersion += 1;
-    return await user.save();
+    try {
+        await user.save();
+    } catch (error) {
+        return false;
+    }
+    return true;
 };
 
 const User = mongoose.model('User', userSchema);
