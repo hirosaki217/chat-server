@@ -95,7 +95,7 @@ class AuthService {
 
         const hashPassword = await commonUtils.hashPassword(password);
 
-        await User.updateOne({ username }, { password: hashPassword, otp: null, otpTime: null });
+        await User.updateOne({ username }, { password: hashPassword });
     }
 
     async sendOTP(_id, username) {
@@ -106,22 +106,18 @@ class AuthService {
         otpTime.setMinutes(otpTime.getMinutes() + OTP_EXPIRE_MINUTE);
         await User.updateOne({ _id }, { otp, otpTime });
 
-        const { data } = await axios.post(process.env.BALANCE_API_URL, {
-            ApiKey: process.env.PHONE_API_KEY,
-            SecretKey: process.env.PHONE_API_SECRET,
-        });
-
-        if (data.Balance > 500) {
+        try {
             await axios.get(process.env.PHONE_OTP_API_URL, {
                 params: {
-                    Phone: username,
-                    Content: `Ma OTP (thoi han ${OTP_EXPIRE_MINUTE} phut) xac nhan tai khoan cua ban la: ${otp} `,
-                    ApiKey: process.env.PHONE_API_KEY,
-                    SecretKey: process.env.PHONE_API_SECRET,
-                    SmsType: 8,
+                    key: process.env.PHONE_API_KEY,
+                    phone: '+84' + username,
+                    message: `ma OTP cua ban la ${otp} (${OTP_EXPIRE_MINUTE} phut)`,
+                    device: process.env.DEVICE_SEND,
                 },
             });
-        } else throw new UserError('tai khoan gui tin khong du tien ');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     checkOTP(confirmOtp, currentOtp, expOtp) {
