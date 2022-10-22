@@ -4,7 +4,7 @@ const NotFoundError = require('../exception/NotFoundError');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const dateUtils = require('../utils/dateUtils');
-
+const ObjectId = mongoose.Types.ObjectId;
 const userSchema = new Schema(
     {
         name: {
@@ -116,11 +116,12 @@ userSchema.statics.checkByIds = async (ids, message = 'User') => {
 };
 
 userSchema.statics.getById = async (_id, message = 'User') => {
-    const user = await User.findOne({ _id, isActived: true });
+    const user = await User.findOne({ _id: ObjectId(_id), isActived: true });
     if (!user) throw new NotFoundError(message);
 
     const { name, username, birthDay, gender, avatar, avatarColor, coverImage, isAdmin, contacts } = user;
-    return {
+
+    const userModify = {
         _id,
         name,
         username,
@@ -132,6 +133,7 @@ userSchema.statics.getById = async (_id, message = 'User') => {
         isAdmin,
         contacts,
     };
+    return userModify;
 };
 
 userSchema.statics.existsByUsername = async (username) => {
