@@ -30,8 +30,8 @@ class AuthController {
         try {
             if (req._id) {
                 const isLogout = await authService.logout(req._id);
-                res.clearCookie(process.env.REFRESH_TOKEN_COOKIE_NAME);
-                res.json({ logout: isLogout });
+                res.clearCookie(process.env.REFRESH_TOKEN_COOKIE_NAME).json({ logout: isLogout });
+                // res.json({ logout: isLogout });
             }
         } catch (error) {
             next(error);

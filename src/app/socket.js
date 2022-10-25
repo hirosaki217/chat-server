@@ -9,6 +9,7 @@ const socket = (io) => {
 
         socket.on('join', (userId) => {
             socket.userId = userId;
+            console.log(`user: ${userId} is join to socket`);
             socket.join(userId);
         });
         // socket.on('setup', (conversationId) => {

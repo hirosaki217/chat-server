@@ -52,6 +52,45 @@ class FriendService {
         return friends;
     }
 
+    async getFriendRequest(_id, userId) {
+        const users = await FriendRequest.aggregate([
+            { $match: { receiverId: ObjectId(_id), senderId: ObjectId(userId) } },
+            { $project: { _id: 0, senderId: 1 } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'senderId',
+                    foreignField: '_id',
+                    as: 'user',
+                },
+            },
+            { $unwind: '$user' },
+            { $replaceWith: '$user' },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    username: 1,
+                    avatar: 1,
+                    avatarColor: 1,
+                },
+            },
+        ]);
+        const usersResult = [];
+
+        for (const userEle of users) {
+            const userTempt = {
+                ...userEle,
+                numberCommonGroup: await userService.getNumberCommonGroup(_id, userEle._id),
+                numberCommonFriend: await userService.getNumberCommonFriend(_id, userEle._id),
+            };
+
+            usersResult.push(userTempt);
+        }
+
+        return usersResult[0];
+    }
+
     async acceptFriend(_id, senderId) {
         await FriendRequest.checkByIds(senderId, _id);
 
@@ -168,6 +207,7 @@ class FriendService {
             senderId: _id,
             receiverId: userId,
         });
+
         await friendRequest.save();
     }
 

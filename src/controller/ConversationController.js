@@ -60,7 +60,7 @@ class ConversationController {
 
         try {
             const result = await conversationService.createConversation(_id, userId);
-
+            if (!result.isExists) this.io.to(userId + '').emit('create-individual-conversation', result._id);
             res.status(201).json(result);
         } catch (err) {
             next(err);
@@ -96,7 +96,9 @@ class ConversationController {
             if (!name) throw new UserError('Name invalid');
 
             const message = await conversationService.rename(id, name, _id);
-
+            if (message) {
+                this.io.to(id + '').emit('rename-conversation', id, name, message);
+            }
             res.json();
         } catch (err) {
             next(err);
@@ -109,7 +111,8 @@ class ConversationController {
 
         try {
             const { avatar, lastMessage } = await conversationService.updateAvatar(id, file, _id);
-
+            this.io.to(id + '').emit('update-avatar-conversation', id, avatar, lastMessage);
+            this.io.to(id + '').emit('new-message', id, lastMessage);
             res.json({ avatar, lastMessage });
         } catch (err) {
             next(err);
@@ -122,7 +125,8 @@ class ConversationController {
 
         try {
             const { avatar, lastMessage } = await conversationService.updateAvatarWithBase64(id, req.body, _id);
-
+            this.io.to(id + '').emit('update-avatar-conversation', id, avatar, lastMessage);
+            this.io.to(id + '').emit('new-message', id, lastMessage);
             res.json({ avatar, lastMessage });
         } catch (err) {
             next(err);
@@ -148,7 +152,7 @@ class ConversationController {
 
         try {
             await conversationService.deleteById(id, _id);
-
+            this.io.to(id).emit('delete-conversation', id);
             res.status(204).json();
         } catch (err) {
             next(err);
@@ -215,7 +219,11 @@ class ConversationController {
 
         try {
             const result = await memberService.addManagersForConversation(id, managerIds, _id);
-
+            this.io.to(id + '').emit('add-managers', {
+                conversationId: id,
+                managerIds: result.managerIds,
+            });
+            this.io.to(id + '').emit('new-message', id, result.message);
             res.status(200).json(result);
         } catch (err) {
             next(err);
@@ -229,7 +237,11 @@ class ConversationController {
 
         try {
             const result = await memberService.deleteManagersForConversation(id, managerIds, _id);
-
+            this.io.to(id + '').emit('delete-managers', {
+                conversationId: id,
+                managerIds: result.deleteManagerIds,
+            });
+            this.io.to(id + '').emit('new-message', id, result.message);
             res.status(200).json(result);
         } catch (err) {
             next(err);
