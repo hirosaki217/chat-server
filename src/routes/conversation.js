@@ -4,13 +4,13 @@ const MemberController = require('../controller/MemberController');
 const uploadFile = require('../middleware/uploadFile');
 
 const conversationRouter = (io) => {
-    const conversationController = new ConversationController();
-    const memberController = new MemberController();
+    const conversationController = new ConversationController(io);
+    const memberController = new MemberController(io);
 
     router.get('', conversationController.getList);
     router.get('/:id', conversationController.getOne);
-    router.post('/new/:userId', conversationController.createConversation);
     router.post('/new/groups', conversationController.createGroupConversation);
+    router.post('/new/:userId', conversationController.createConversation);
     router.patch('/:id/name', conversationController.rename);
     router.patch('/:id/avatar', uploadFile.singleUploadMiddleware, conversationController.updateAvatar);
     router.patch('/:id/avatar/base64', conversationController.updateAvatarWithBase64);

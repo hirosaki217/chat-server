@@ -1,8 +1,11 @@
 const router = require('express').Router();
-const memberController = require('../controllers/MemberController');
+const MemberController = require('../controller/MemberController');
 
-router.post('/:userId', memberController.addMember);
-router.delete('/:userId', memberController.deleteMember);
-router.delete('/leave', memberController.leaveGroup);
-
-module.exports = router;
+const memberRouter = (io) => {
+    const memberController = new MemberController(io);
+    router.post('/:userId', memberController.addMember);
+    router.delete('/:userId', memberController.deleteMember);
+    router.delete('/leave', memberController.leaveGroup);
+    return router;
+};
+module.exports = memberRouter;

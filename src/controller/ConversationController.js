@@ -70,7 +70,7 @@ class ConversationController {
     async createGroupConversation(req, res, next) {
         const { _id } = req;
         const { name = '', userIds = [] } = req.body;
-
+        console.log('userIds', userIds);
         try {
             const conversationId = await conversationService.createGroupConversation(
                 _id,
@@ -79,7 +79,9 @@ class ConversationController {
             );
 
             const userIdsTempt = [_id, ...userIds];
-            userIdsTempt.forEach((userIdEle) => this.io.to(userIdEle).emit('create-conversation', conversationId));
+            console.log('userIdsTempt', userIdsTempt);
+
+            userIdsTempt.forEach((userIdEle) => this.io.to(userIdEle + '').emit('create-conversation', conversationId));
 
             res.status(201).json({ _id: conversationId });
         } catch (err) {

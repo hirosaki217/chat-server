@@ -230,7 +230,7 @@ class ConversationService {
                 userId,
             });
 
-            member.save().then();
+            await member.save();
         }
 
         const memberAddMessage = new Message({
@@ -241,7 +241,7 @@ class ConversationService {
             conversationId: _id,
         });
 
-        memberAddMessage.save().then((message) => {
+        await memberAddMessage.save().then((message) => {
             Conversation.updateOne({ _id }, { lastMessageId: message._id }).then();
         });
 
