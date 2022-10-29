@@ -24,7 +24,7 @@ const messageSchema = new Schema(
         replyMessageId: ObjectId,
         type: {
             type: String,
-            enum: ['TEXT', 'IMAGE', 'VIDEO', 'FILE', 'HTML', 'NOTIFY'],
+            enum: ['TEXT', 'IMAGE', 'VIDEO', 'FILE', 'HTML', 'NOTIFY', 'GROUP_IMAGE'],
             require: true,
         },
         reacts: {

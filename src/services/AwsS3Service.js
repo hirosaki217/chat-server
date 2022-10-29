@@ -45,6 +45,16 @@ class AwsS3Service {
         }
     }
 
+    async uploadFiles(files, bucketName = BucketName) {
+        let groupLocation = '';
+
+        for (let file of files) {
+            groupLocation += (await this.uploadFile(file, bucketName)) + ';';
+        }
+        console.log('groupLocation ', groupLocation);
+        return groupLocation;
+    }
+
     async uploadWithBase64(fileBase64, fileName, fileExtension) {
         const fileBuffer = Buffer.from(fileBase64, 'base64');
 

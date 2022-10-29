@@ -100,6 +100,28 @@ class MessageService {
         return this.updateWhenHasNewMessage(saveMessage, conversationId, userId);
     }
 
+    async addFiles(files, type, conversationId, userId) {
+        // await messageValidate.validateFileMessage(file, type, conversationId, userId);
+
+        const content = await awsS3Service.uploadFiles(files);
+
+        const newMessageTempt = {
+            userId,
+            content,
+            type,
+        };
+
+        newMessageTempt.conversationId = conversationId;
+
+        const newMessage = new Message({
+            ...newMessageTempt,
+        });
+
+        const saveMessage = await newMessage.save();
+
+        return this.updateWhenHasNewMessage(saveMessage, conversationId, userId);
+    }
+
     async addFileWithBase64(fileInfo, type, conversationId, userId) {
         await messageValidate.validateFileMessageWithBase64(fileInfo, type, conversationId, userId);
         const { fileBase64, fileName, fileExtension } = fileInfo;

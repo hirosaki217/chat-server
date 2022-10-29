@@ -9,6 +9,7 @@ const messageRouter = (io) => {
     router.post('/text', messageController.addText);
     router.get('/:conversationId/files', messageController.getListFiles);
     router.post('/files', uploadFile.singleUploadMiddleware, messageController.addFile);
+    router.post('/multiple/files', uploadFile.multipleUploadMiddleware, messageController.addFiles);
     router.post('/files/base64', messageController.addFileWithBase64);
     router.delete('/:id', messageController.deleteById);
     router.delete('/:id/only', messageController.deleteOnlyMeById);

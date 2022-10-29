@@ -9,6 +9,7 @@ class MessageController {
         this.getListByChannelId = this.getListByChannelId.bind(this);
         this.addText = this.addText.bind(this);
         this.addFile = this.addFile.bind(this);
+        this.addFiles = this.addFiles.bind(this);
         this.addFileWithBase64 = this.addFileWithBase64.bind(this);
         this.deleteById = this.deleteById.bind(this);
         this.addReaction = this.addReaction.bind(this);
@@ -66,13 +67,34 @@ class MessageController {
 
     async addFile(req, res, next) {
         const { _id, file } = req;
-        const { type, conversationId, channelId } = req.query;
+        const { type, conversationId } = req.query;
 
         try {
             if (!conversationId || !type) throw new UserError('Params type or conversationId not exists');
 
-            const message = await messageService.addFile(file, type, conversationId, channelId, _id);
+            const message = await messageService.addFile(file, type, conversationId, _id);
             this.io.to(conversationId + '').emit('new-message', conversationId, message);
+            this.io
+                .in(conversationId + '')
+                .emit('has-change-conversation-when-have-new-message', conversationId, message);
+            res.status(201).json(message);
+        } catch (err) {
+            next(err);
+        }
+    }
+    async addFiles(req, res, next) {
+        const { _id, files } = req;
+        console.log('files', files);
+        const { type, conversationId } = req.query;
+
+        try {
+            if (!conversationId || !type) throw new UserError('Params type or conversationId not exists');
+
+            const message = await messageService.addFiles(files, type, conversationId, _id);
+            // this.io.to(conversationId + '').emit('new-message', conversationId, message);
+            // this.io
+            //     .in(conversationId + '')
+            //     .emit('has-change-conversation-when-have-new-message', conversationId, message);
             res.status(201).json(message);
         } catch (err) {
             next(err);
