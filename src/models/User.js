@@ -116,7 +116,7 @@ userSchema.statics.checkByIds = async (ids, message = 'User') => {
 };
 
 userSchema.statics.getById = async (_id, message = 'User') => {
-    const user = await User.findOne({ _id: ObjectId(_id), isActived: true });
+    const user = await User.findOne({ _id, isActived: true });
     if (!user) throw new NotFoundError(message);
 
     const { name, username, birthDay, gender, avatar, avatarColor, coverImage, isAdmin, contacts } = user;
