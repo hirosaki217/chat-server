@@ -12,6 +12,9 @@ const socket = (io) => {
             console.log(`user: ${userId} is join to socket`);
             socket.join(userId);
         });
+        // socket.on('get-user-online', (userId, cb) => {
+        //     getUserOnline(userId, cb);
+        // });
         // socket.on('setup', (conversationId) => {
         //     socket.join('hieu');
         //     socket.to('hieu').emit('connected', conversationId);
@@ -26,6 +29,13 @@ const socket = (io) => {
 
         socket.on('join-conversation', (conversationId) => {
             socket.join(conversationId);
+        });
+        socket.on('typing', (conversationId, me) => {
+            socket.broadcast.to(conversationId).emit('typing', conversationId, me);
+        });
+
+        socket.on('not-typing', (conversationId, me) => {
+            socket.broadcast.to(conversationId).emit('not-typing', conversationId, me);
         });
     });
 };

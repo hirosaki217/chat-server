@@ -23,7 +23,11 @@ class MessageController {
 
         try {
             const messages = await messageService.getList(conversationId, _id, parseInt(page), parseInt(size));
-
+            this.io.to(conversationId + '').emit('user-last-view', {
+                conversationId,
+                userId: _id,
+                lastView: new Date(),
+            });
             res.json(messages);
         } catch (error) {
             next(error);
@@ -91,10 +95,10 @@ class MessageController {
             if (!conversationId || !type) throw new UserError('Params type or conversationId not exists');
 
             const message = await messageService.addFiles(files, type, conversationId, _id);
-            // this.io.to(conversationId + '').emit('new-message', conversationId, message);
-            // this.io
-            //     .in(conversationId + '')
-            //     .emit('has-change-conversation-when-have-new-message', conversationId, message);
+            this.io.to(conversationId + '').emit('new-message', conversationId, message);
+            this.io
+                .in(conversationId + '')
+                .emit('has-change-conversation-when-have-new-message', conversationId, message);
             res.status(201).json(message);
         } catch (err) {
             next(err);
