@@ -42,6 +42,7 @@ class AuthService {
             // chua otp
             isActived: true,
         });
+
         return await newUser.save();
     }
 
