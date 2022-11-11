@@ -225,7 +225,7 @@ class ConversationController {
                 conversationId: id,
                 managerIds: result.managerIds,
             });
-            this.io.to(id + '').emit('new-message', id, result.message);
+            this.io.in(id + '').emit('new-message-group', id, result.message);
             res.status(200).json(result);
         } catch (err) {
             next(err);
@@ -236,6 +236,7 @@ class ConversationController {
         const { _id } = req;
         const { id } = req.params;
         const { managerIds } = req.body;
+        console.log(id, managerIds);
 
         try {
             const result = await memberService.deleteManagersForConversation(id, managerIds, _id);
@@ -243,7 +244,7 @@ class ConversationController {
                 conversationId: id,
                 managerIds: result.deleteManagerIds,
             });
-            this.io.to(id + '').emit('new-message', id, result.message);
+            this.io.in(id + '').emit('new-message-group', id, result.message);
             res.status(200).json(result);
         } catch (err) {
             next(err);
