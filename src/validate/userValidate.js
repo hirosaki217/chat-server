@@ -115,7 +115,7 @@ const userValidate = {
 
         return {
             name,
-            dateOfBirth: dateUtils.toDateFromObject(dateOfBirth),
+            birthDay: dateUtils.toDateFromObject(dateOfBirth),
             gender: new Boolean(gender),
         };
     },
@@ -133,6 +133,27 @@ const userValidate = {
         const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 
         return regex.test(phone);
+    },
+    validateBirthDay: (date) => {
+        if (!date) return false;
+
+        const { day, month, year } = date;
+
+        if (!day || !month || !year) return false;
+
+        if (year < 1900) return false;
+
+        // check xem có hợp lệ không
+        const dateTempt = new Date(`${year}-${month}-${day}`);
+        if (dateTempt.toDateString() === 'Invalid Date') return false;
+
+        // check tuổi phải >=10
+        const fullyear = dateTempt.getFullYear();
+        dateTempt.setFullYear(fullyear + 10);
+
+        if (dateTempt > new Date()) return false;
+
+        return true;
     },
 };
 

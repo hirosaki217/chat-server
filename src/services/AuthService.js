@@ -40,10 +40,13 @@ class AuthService {
             ...data,
             avatarColor,
             // chua otp
-            isActived: true,
+            isActived: false,
         });
 
-        return await newUser.save();
+        const saveUser = await newUser.save();
+
+        const { _id, username } = saveUser;
+        this.sendOTP(_id, username);
     }
 
     async logout(userId) {
@@ -68,12 +71,11 @@ class AuthService {
 
     async resetOTP(username) {
         if (!userValidate.validateUsername(username)) throw new UserError('Username invalid');
-
         const user = await User.findOne({ username });
+
         if (!user) throw new NotFoundError('User');
 
         const { _id } = user;
-
         await this.sendOTP(_id, username);
 
         return {
@@ -100,22 +102,29 @@ class AuthService {
     }
 
     async sendOTP(_id, username) {
-        if (userValidate.validatePhone(username)) type = false;
+        // if (userValidate.validatePhone(username)) type = false;
 
         const otp = commonUtils.getRandomOTP();
         const otpTime = new Date();
         otpTime.setMinutes(otpTime.getMinutes() + OTP_EXPIRE_MINUTE);
         await User.updateOne({ _id }, { otp, otpTime });
 
+        console.log('OPT : ', otp);
+        console.log('test', process.env.PHONE_OTP_API_URL);
+        const params = {
+            secret: 'a1a1a6cb05ff5a483d967efa0cbd305abfcfab0f', // your API secret from (Tools -> API Keys) page
+            mode: 'devices',
+            device: '00000000-0000-0000-ba97-eed32d993ebb',
+            sim: 1,
+            priority: 1,
+            phone: `+84${username.slice(1, 10)}`,
+            message: `Ma OTP cua ban la ${otp} (${OTP_EXPIRE_MINUTE} phut)`,
+        };
         try {
-            await axios.get(process.env.PHONE_OTP_API_URL, {
-                params: {
-                    key: process.env.PHONE_API_KEY,
-                    phone: '+84' + username,
-                    message: `ma OTP cua ban la ${otp} (${OTP_EXPIRE_MINUTE} phut)`,
-                    device: process.env.DEVICE_SEND,
-                },
-            });
+            const res = await axios.post('https://sms.uncgateway.com/api/send/sms', null, { params });
+
+            // console.log(res.data);
+            console.log(otp);
         } catch (error) {
             console.log(error);
         }
