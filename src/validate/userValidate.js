@@ -107,7 +107,7 @@ const userValidate = {
 
         if (!name || !NAME_REGEX.test(name)) error.name = NAME_INVALID;
 
-        if (!this.validateDateOfBirth(dateOfBirth)) error.dateOfBirth = DATE_INVALID;
+        if (!this.validateBirthDay(dateOfBirth)) error.dateOfBirth = DATE_INVALID;
 
         if (gender !== 0 && gender !== 1) error.gender = GENDER_INVALID;
 
