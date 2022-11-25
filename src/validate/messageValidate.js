@@ -39,7 +39,8 @@ const messageValidate = {
                 throw new UserError('Image mimetype invalid');
 
         if (type === 'VIDEO')
-            if (mimetype !== 'video/mp3' && mimetype !== 'video/mp4') throw new UserError('Video mimetype invalid');
+            if (mimetype !== 'video/mp3' && mimetype !== 'video/mp4' && mimetype !== 'video/quicktime')
+                throw new UserError('Video mimetype invalid');
 
         if (type === 'FILE')
             if (
